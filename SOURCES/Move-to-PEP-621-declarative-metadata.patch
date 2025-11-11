@@ -1,19 +1,24 @@
-From 49510fec2cddeb796ab4078be4577eee624833f0 Mon Sep 17 00:00:00 2001
+From 5f61e6432496f3382b9d57bd88ca114b6e1efdb8 Mon Sep 17 00:00:00 2001
 From: =?UTF-8?q?Tom=C3=A1=C5=A1=20Hrn=C4=8Diar?= <thrnciar@redhat.com>
-Date: Tue, 21 Feb 2023 18:22:42 +0100
+Date: Fri, 1 Nov 2024 14:02:23 +0100
 Subject: [PATCH] Move to PEP 621 declarative metadata
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Co-Authored-By: Bartek Sokorski <b.sokorski@gmail.com>
+Co-Authored-By: Miro Hrončok <miro@hroncok.cz>
 ---
- pyproject.toml | 31 ++++++++++++++++++++++++++++++-
- setup.py       | 33 ---------------------------------
- 2 files changed, 30 insertions(+), 34 deletions(-)
+ pyproject.toml | 34 +++++++++++++++++++++++++++++++++-
+ setup.py       | 36 ------------------------------------
+ 2 files changed, 33 insertions(+), 37 deletions(-)
  delete mode 100644 setup.py
 
 diff --git a/pyproject.toml b/pyproject.toml
-index 05374a2..1134247 100644
+index 05374a2..d91f3c9 100644
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -1,7 +1,36 @@
+@@ -1,7 +1,39 @@
  [build-system]
 -requires = ["setuptools", "calver"]
 +requires = ["setuptools >= 61.0"]
@@ -37,6 +42,9 @@ index 05374a2..1134247 100644
 +[project.urls]
 +Homepage = "https://github.com/pypa/trove-classifiers"
 +
++[project.scripts]
++trove-classifiers = "trove_classifiers.__main__:cli"
++
 +[tool.setuptools]
 +package-dir = {"" = "src"}
 +include-package-data = false
@@ -53,10 +61,10 @@ index 05374a2..1134247 100644
  warn_unreachable = true
 diff --git a/setup.py b/setup.py
 deleted file mode 100644
-index 826eac7..0000000
+index d8d85e4..0000000
 --- a/setup.py
 +++ /dev/null
-@@ -1,33 +0,0 @@
+@@ -1,36 +0,0 @@
 -from io import open
 -from os import path
 -
@@ -87,9 +95,12 @@ index 826eac7..0000000
 -    package_dir={"": "src"},
 -    packages=find_packages(where="src"),
 -    package_data={"": ["py.typed"]},
--    use_calver=True,
+-    use_calver="%Y.%m.%d.%H",
 -    setup_requires=["calver"],
+-    entry_points={
+-        "console_scripts": ["trove-classifiers=trove_classifiers.__main__:cli"],
+-    },
 -)
 -- 
-2.40.1
+2.49.0
 

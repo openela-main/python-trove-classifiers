@@ -1,11 +1,11 @@
 Name:           python-trove-classifiers
-Version:        2023.10.18
-Release:        5%{?dist}
+Version:        2025.5.9.12
+Release:        1%{?dist}
 Summary:        Canonical source for classifiers on PyPI (pypi.org)
 
 License:        Apache-2.0
 URL:            https://github.com/pypa/trove-classifiers
-Source:         %{pypi_source trove-classifiers}
+Source:         %{pypi_source trove_classifiers}
 
 # Drop dependency on calver which is not packaged in Fedora.
 # This patch is rebased version of upstream PR:
@@ -31,9 +31,13 @@ Summary:        %{summary}
 
 
 %prep
-%autosetup -p1 -n trove-classifiers-%{version}
+%autosetup -p1 -n trove_classifiers-%{version}
 # Replace @@VERSION@@ with %%version
 %writevars -f pyproject.toml version
+
+# Make the the CLI tests work in %%check
+# https://github.com/pypa/trove-classifiers/issues/219
+sed -i 's@{BINDIR}/@@' tests/test_cli.py
 
 
 %generate_buildrequires
@@ -55,9 +59,14 @@ Summary:        %{summary}
 
 %files -n python3-trove-classifiers -f %{pyproject_files}
 %doc README.*
+%{_bindir}/trove-classifiers
 
 
 %changelog
+* Tue May 13 2025 Miro Hrončok <mhroncok@redhat.com> - 2025.5.9.12-1
+- Update to 2025.5.9.12
+- Resolves rhbz#2362823
+
 * Tue Oct 29 2024 Troy Dawson <tdawson@redhat.com> - 2023.10.18-5
 - Bump release for October 2024 mass rebuild:
   Resolves: RHEL-64018
